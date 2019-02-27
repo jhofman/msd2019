@@ -1,7 +1,7 @@
 ---
 title: "Statistical Inference"
 author: "Jake Hofman"
-date: "April 20, 2017"
+date: "February 22, 2019"
 output:
   html_document:
     toc: true
@@ -10,9 +10,6 @@ output:
 
 ```{r}
 library(tidyverse)
-#library(ggplot2)
-#library(reshape)
-#library(dplyr)
 
 theme_set(theme_bw())
 
