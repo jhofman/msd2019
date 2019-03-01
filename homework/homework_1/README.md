@@ -1,3 +1,5 @@
+## Homework 1
+
 The first problem explores various counting techniques, the second involves some command line and R counting exercises, and the third looks at the impact of inventory size on customer satisfaction for the MovieLens data.
 Details are in the README.md file for each problem.
 
