@@ -1,6 +1,6 @@
 ### 1. Coffee and cancer
 
-Note: This is adapted from a discussion by David Spiegelhalter.
+Note: This is taken from a discussion by David Spiegelhalter.
 
 In March of 2018 there was a [court case in California](https://www.washingtonpost.com/news/to-your-health/wp/2018/03/29/coffee-must-carry-cancer-warning-california-judge-rules/) that hinged on whether a chemical called acrylamide found in coffee causes cancer.
 
