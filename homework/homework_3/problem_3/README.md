@@ -1,4 +1,4 @@
-### 1. Regularized logistic regression for article classification
+### 3. Regularized logistic regression for article classification
 
 In this problem you will use logistic regression to build a text classifier that predicts the section that an article from the New York Times (NYT) belongs to based on the words it contains.
 
