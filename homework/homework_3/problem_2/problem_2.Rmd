@@ -1,0 +1,69 @@
+---
+title: "MSD Homework 3, Problem 2"
+author: "Your Name (your uni)"
+date: '`r Sys.time()`'
+output:
+  pdf_document:
+    toc: yes
+    toc_depth: 3
+---
+
+```{r setup, include=FALSE}
+library(here)
+library(scales)
+library(modelr)
+library(tidyverse)
+
+theme_set(theme_bw())
+
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Part A
+
+Read in the data
+
+```{r read-data}
+data <- read_tsv('polyfit.tsv')
+```
+
+# Part B
+
+Shuffle the data and assign each row to one of 5 different folds
+
+```{r shuffle-data}
+# make sure to use this seed
+set.seed(42)
+
+```
+
+Implement 5-fold cross-validation to compute the average train / test error (RMSE) for each polynomial degree
+
+```{r cross-validate}
+
+```
+
+Make a plot showing the how the train and test error vary with the polynomial degree
+
+```{r plot-cv-curve}
+
+```
+
+# Part C
+
+Select the degree with the lowest average test error and fit a final model for this degree on all of the data
+
+```{r fit-best-model}
+
+```
+
+Make a scatter plot of all of the data with the best-fit model overlayed as a line
+```{r plot-best-model}
+
+```
+
+Report the coefficients for the best-fit model
+
+```{r print-best-model-coefficients}
+
+```
