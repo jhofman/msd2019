@@ -1,0 +1,167 @@
+---
+title: "Interpreting logistic regression"
+author: "Jake Hofman"
+date: "April 5, 2019"
+output:
+  html_document:
+    toc: yes
+    toc_depth: 2
+  pdf_document:
+    toc: yes
+    toc_depth: '2'
+---
+
+```{r setup, include=F}
+library(scales)
+library(knitr)
+library(tidyverse)
+library(broom)
+library(modelr)
+
+theme_set(theme_bw())
+```
+
+# Read the data
+
+```{r read-data}
+titanic <- read_csv('titanic_train.csv')
+```
+
+# Simple model of survival by gender
+
+First, fit a simple model by gender only.
+
+```{r model-gender-only}
+model <- glm(Survived ~ Sex, data = titanic)
+tidy(model) %>%
+  kable
+```
+
+Same model, but no intercept, so we can see both factor levels explicitly.
+
+```{r model-gender-only-no-intercept}
+model <- glm(Survived ~ 0 + Sex, data = titanic)
+tidy(model) %>%
+  kable()
+```
+
+Plot the estimated coefficients, which give log odds. This is somewhat easier to see, but log odds are difficult to interpret.
+
+```{r model-gender-only-no-intercept-log-odds}
+tidy(model) %>%
+  ggplot(aes(x = term, y = estimate)) +
+  geom_pointrange(aes(ymin = estimate - std.error, ymax = estimate + std.error)) +
+  scale_x_discrete(labels = c("Female", "Male")) +
+  labs(x = '',
+       y = 'Estimated log-odds of survival',
+       title = 'Estimated log-odds of survival by gender')
+```
+
+Same as above, but convert from log odds to probabilities. This is somewhat easier to understand. We could have called predict here, but did the transformation manually to make clear how we convert from coefficients to predictions.
+
+```{r model-gender-only-no-intercept-probabilities}
+tidy(model) %>%
+  mutate(estimate = 1 / (1 + exp(-estimate)),
+         lower = 1 / (1 + exp(-(estimate - std.error))),
+         upper = 1 / (1 + exp(-(estimate + std.error)))) %>%
+  ggplot(aes(x = term, y = estimate)) +
+  geom_pointrange(aes(ymin = estimate - std.error, ymax = estimate + std.error)) +
+  scale_x_discrete(labels = c("Female", "Male")) +
+  scale_y_continuous(labels = percent) +
+  labs(x = '',
+       y = 'Estimated probability of survival',
+       title = 'Estimated probability of survival by gender')
+```
+
+# Model with gender and age
+
+Fit a model with age and gender, allowing for quadratic in age.
+
+```{r model-gender-age-quadratic}
+model <- glm(Survived ~ Sex * (Age + I(Age^2)), data = titanic)
+tidy(model) %>%
+  kable()
+```
+
+Create fake data to predict on using all unique values of gender and age in the dataset.
+
+```{r model-gender-age-quadratic-predictions}
+plot_data <- titanic %>%
+  data_grid(Sex, Age)
+# add predictions for these fake data
+plot_data$pred <- predict(model, plot_data, type = "response")
+```
+
+Plot the model's predictions. This is easier to look at than the coefficients, but doesn't give us a good sense of how the model and data compare.
+
+```{r model-gender-age-quadratic-plot-predicted}
+
+ggplot(plot_data, aes(x = Age, y = pred, color = Sex)) +
+  geom_line() +
+  scale_y_continuous(labels = percent) +
+  labs(x = 'Age of passenger',
+       y = 'Probability of survival',
+       title = 'Predicted probability of surviving on the Titanic by age and gender')
+```
+
+
+Count the actual fraction of people who survived at each age and gender where we round age to the nearest multiple of 5.
+
+```{r model-gender-age-quadratic-plot-predicted-actual}
+plot_data <- titanic %>%
+  mutate(Age = round(Age / 5) * 5) %>%
+  group_by(Age, Sex) %>%
+  summarize(count = n(),
+            actual = mean(Survived))
+# add predictions
+plot_data$pred <- predict(model, plot_data, type = "response")
+
+# plot predictions and actual survival rates
+ggplot(plot_data, aes(x = Age, y = pred, color = Sex)) +
+  geom_line() +
+  geom_point(aes(x = Age, y = actual, size = count)) +
+  scale_size(guide = F) +
+  scale_y_continuous(labels = percent) +
+  labs(x = 'Age of passenger',
+       y = 'Probability of survival',
+       title = 'Probability of surviving on the Titanic by age and gender',
+       subtitle = 'Lines show model predictions, points show actual rates')
+```
+
+# Fancier model with gender and age on limited age range
+
+Filter out ages where we have only a few observations. Then fit a model with age and gender, allowing for cubic in age this time.
+
+```{r model-gender-age-restricted}
+
+model_data <- titanic %>%
+  filter(Age <= 65)
+
+model <- glm(Survived ~ Sex * (Age + poly(Age,3)), data = model_data)
+tidy(model) %>%
+  kable()
+```
+
+Count the actual fraction of people who survived at each age and gender, where we round age to the nearest multiple of 5.
+
+```{r model-gender-age-restricted-plot-predicted-actual}
+
+plot_data <- model_data %>%
+  mutate(Age = round(Age / 5) * 5) %>%
+  group_by(Age, Sex) %>%
+  summarize(count = n(),
+            actual = mean(Survived))
+# add predictions
+plot_data$pred <- predict(model, plot_data, type = "response")
+
+# plot predictions and actual survival rates
+ggplot(plot_data, aes(x = Age, y = pred, color = Sex)) +
+  geom_line() +
+  geom_point(aes(x = Age, y = actual, size = count)) +
+  scale_size(guide = F) +
+  scale_y_continuous(labels = percent) +
+  labs(x = 'Age of passenger',
+       y = 'Probability of survival',
+       title = 'Probability of surviving on the Titanic by age and gender',
+       subtitle = 'Lines show model predictions, points show actual rates')
+```
