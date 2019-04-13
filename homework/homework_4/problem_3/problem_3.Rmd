@@ -1,0 +1,75 @@
+---
+title: "MSD Homework 4, Problem 4"
+author: "Your Name (your uni)"
+date: '`r Sys.time()`'
+output:
+  pdf_document:
+    toc: yes
+    toc_depth: 3
+---
+
+```{r setup, include=FALSE}
+library(here)
+library(scales)
+library(igraph)
+library(tidyverse)
+
+theme_set(theme_bw())
+
+knitr::opts_chunk$set(echo = TRUE)
+
+```
+
+# Part A
+
+Write a function called `read_edges_with_gender` that accepts the identifier for a school and returns a list of all edges in the school's network along with the gender of each node and its neighbor. Column names should be `node_id`, `neighbor_id`, `node_gender`, `neighbor_gender`, and `school`. Keep in mind that the networks are undirected and each edge is listed only once in the edgelist files (e.g., edge A-B does not appear as B-A).
+
+Then use the `map_df` call below to read the data for all schools into one large dataframe.
+
+```{r read-networks}
+
+read_edges_with_gender <- function(school) 
+
+}
+
+schools <- c("Brown11","Columbia2","Cornell5","Dartmouth6",
+             "Harvard1","Penn94","Princeton12","Yale4")
+edges_with_gender <- map_df(schools, read_edges_with_gender)
+
+```
+
+# Part B
+
+Summarize each node's neighborhood by counting what fraction of its neighbors are identified as male, female, or unknown in a dataframe called `neighbor_gender_dist` with columns `school`, `node_id`, `node_gender`, `neighbor_gender`, `frac_neighbors`, and `frac_neighbors_rounded`. This dataframe will have up to three rows per node, where each row counts the fraction of males, females, or unknowns in that node's neighborhood. 
+
+Then make a plot that shows the probability that a node is female versus the fraction of female neighbors it has, for each school in the dataset. Do this by binning the nodes in each school according to the fraction of female neighbors it has rounded to the nearest 10 percentage points and computing what fraction of nodes in each bin are labeled as female. This plot should contain one panel for each school, with the x-axis showing the fraction of female neighbors a node has, binned in increments of 10 percentage points, and the y axis showing the percent of nodes in each bin that are actually labeled as female. Size points by the number of nodes in each bin, add a dashed diagonal line to the plots, and set the axis limits from 0 to 100% for both axes. Comment on any interesting patterns or differences between schools.
+
+```{r plot-neighbors-vs-node}
+
+```
+
+## Your comments
+
+# Part C
+
+Now use the gender breakdown of a node's neighbors to try to predict the node's gender with a simple majority vote: predict that each node's gender is the most commonly occuring gender among its neighbors, breaking ties randomly. Compare these predictions to each node's actual gender and compute the accuracy of such a classifier for each school across all the nodes in that school's network. Compute standard errors on the accuracy as well. Store the results in a dataframe called `accuracy_by_school` with columns for `school`, `accuracy`, and `se`.
+
+```{r compute-accuracy}
+
+```
+
+# Part D
+
+Make a plot which shows the name of each school on the y-axis and the accuracy of the classifier on the x-axis, with a dashed vertical line at accuracy = 0.50 and schools sorted by decreasing classifier accuracy. Include error bars that show standard errors. Comment on the schools for which your classifier has comparatively low / high accuracy.
+
+```{r plot-accuracy}
+
+```
+
+## Your comments
+
+# Part E
+
+How would you expect the results of parts b) and d) to differ for a network that encodes dating relationships where the majority of individuals are heterosexual instead of the friendship networks you have looked at here? How would you expect accuracies to change if you tried to predict whether a node was a student or faculty member instead of predicting gender?
+
+## Your written answer
