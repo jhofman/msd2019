@@ -1,0 +1,83 @@
+---
+title: "MSD Homework 4, Problem 2"
+author: "Your Name (your uni)"
+date: '`r Sys.time()`'
+output:
+  pdf_document:
+    toc: yes
+    toc_depth: 3
+---
+
+```{r setup, include=FALSE}
+library(here)
+library(scales)
+library(igraph)
+library(tidyverse)
+
+theme_set(theme_bw())
+
+knitr::opts_chunk$set(echo = TRUE)
+
+```
+
+# Part A
+
+read in the edge list for 2010 from the `undweighted10.dat` file.
+
+```{r read-edge-list}
+
+```
+
+# Part B
+
+Make a plot of the distribution of edge weights for the entire network. Use a log-log scale and comment on the result. What does it tell you about the distribution of tie strength?
+
+```{r plot-edge-weights}
+
+```
+
+## Your comments
+
+# Part C
+
+Next define a sequence of 12 thresholds on these edge weights from 0 up through 1024 in powers of 2 (i.e., 0, 1, 2, 4, ..., 1024). For each value in this sequence, remove all edges whose weight is below the threshold and construct a network from the remaining nodes and edges.
+
+For each such network, compute:
+
+* The number of nodes in the network
+* The number of edges in the network
+* The number of connected components in the network
+* The fraction of nodes contained in the largest connected component of the network
+* The average distance between all pairs of nodes in the network
+
+A for loop over the threshold values is probably easiest here.
+
+```{r compute-stats-by-threshold}
+
+```
+
+# Part D
+
+Plot each of these five quantities (on the vertical axis) as a function of the thresholds used (on a logarithmic horizontal axis), and comment on the shape of them.
+
+What's happening to the number of nodes, edges, and components?
+How and why is the average distance between nodes changing?
+
+```{r plot-stats}
+
+```
+
+## Your comments
+
+# Part E
+
+You should notice a peak in the number of connected components as a function of the threshold.
+What's happening here?
+Explain and provide a visualization of the network at this peak, as well as at the next threshold value beyond the peak.
+
+## Your written answer
+
+
+```{r plot-network-at-peak}
+
+```

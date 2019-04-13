@@ -14,4 +14,6 @@ d) Make a plot which shows the name of each school on the y-axis and the accurac
 
 e) How would you expect the results of parts b) and d) to differ for a network that encodes dating relationships where the majority of individuals are heterosexual instead of the friendship networks you have looked at here? How would you expect accuracies to change if you tried to predict whether a node was a student or faculty member instead of predicting gender?
 
+Place your solution in the problem_3.Rmd file in this directory and submit both the Rmd and a rendered pdf.
+
 *Do not* use igraph or any network packages to complete this problem. Instead create one dataframe for the nodes of each network and one dataframe for the edges of that network, and do all calculations by manipulating these dataframes.
